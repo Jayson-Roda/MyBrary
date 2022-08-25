@@ -17,11 +17,12 @@ app.use(expressLayouts)
 app.use(express.static('public'))
 
 
-mongoose.connect(process.env.DATABASE_URL)
-    .then(() => {
-        app.listen(process.env.PORT || 3000, () => {
-            console.log('DB Connect Listening to Port', process.env.PORT)
-        })
-    })
+mongoose.connect(process.env.DATABASE_URL, {
+    useNewUrlParser: true
+})
+
+const db = mongoose.connection
+db.on('error', error => console.error(error))
+db.once('open', () => console.log("Connected to mongoose"))
 
 app.use('/', indexRouter)
