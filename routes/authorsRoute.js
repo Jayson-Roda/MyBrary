@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const Author = require('../models/authorSchema')
+const Author = require('../models/authorModel')
 
 // All authors Route
 router.get('/', async(req, res) => {
