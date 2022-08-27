@@ -40,7 +40,7 @@ router.get('/new', async (req, res) => {
     renderNewPage(res, new Book())
 })
 
-// Crete Book Route
+// Create Book Route
 router.post('/', async (req, res) => {
     const book = new Book({
         title: req.body.title,
