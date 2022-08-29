@@ -1,8 +1,2 @@
 <h2>Recently Added</h2>
-<div>
-    <% books.forEach(book => { %>
-        <a href="/books/<%= book.id %>">
-            <img height="150" width="100" src="<%= book.coverImagePath %> " alt="cover image">
-        </a>
-    <% }) %> 
-</div>
+<%- include('partials/bookGrid', { books, large: true }) %> 
