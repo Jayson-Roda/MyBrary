@@ -22,16 +22,19 @@ app.use(express.static('public'))
 app.use(bodyParser.urlencoded({ limit: '10mb', extended: false }))
 app.use(methodOverride('_method'))
 
-mongoose.connect(process.env.DATABASE_URL, {
-    useNewUrlParser: true
-})
-
-const db = mongoose.connection
-db.on('error', error => console.error(error))
-db.once('open', () => console.log("Connected to mongoose"))
-
+// routes
 app.use('/', indexRoutes)
 app.use('/authors', authorsRoutes)
 app.use('/books', booksRoutes)
 
-app.listen(process.env.PORT || 3000)
+
+mongoose.connect(process.env.DATABASE_URL)
+    .then(() => {
+        // listen for request
+        app.listen(process.env.PORT || 3000, () => {
+            console.log('DB Connected Listening on port ', process.env.PORT || 3000)
+        })
+    })
+    .catch((err) => {
+        console.log(err)
+    })

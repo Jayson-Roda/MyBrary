@@ -1,6 +1,6 @@
 const Author = require('../models/authorModel');
 const Book = require('../models/bookModel');
-const imageMimeTypes = ['image/jpg', 'image/png', 'image/gif'];
+const imageMimeTypes = ['image/jpeg', 'image/png', 'image/gif'];
 
 const getBooks = async (req, res) => {
     let query = Book.find()
@@ -40,7 +40,8 @@ const createBook = async (req, res) => {
     try {
         const newBook = await book.save()
         res.redirect(`books/${newBook.id}`)
-    } catch {
+    } catch (error) {
+        console.log(error)
         renderNewPage(res, book, true)
     }
 }
