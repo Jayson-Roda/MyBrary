@@ -9,9 +9,9 @@ const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
 const methodOverride = require('method-override')
 
-const indexRouter = require('./routes/indexRoutes')
-const authorRouter = require('./routes/authorsRoute')
-const booksRouter = require('./routes/booksRoute')
+const indexRoutes = require('./routes/indexRoutes')
+const authorsRoutes = require('./routes/authorsRoutes')
+const booksRoutes = require('./routes/booksRoutes')
 
 // MIDDLEWARE
 app.set('view engine', 'ejs')
@@ -30,8 +30,8 @@ const db = mongoose.connection
 db.on('error', error => console.error(error))
 db.once('open', () => console.log("Connected to mongoose"))
 
-app.use('/', indexRouter)
-app.use('/authors', authorRouter)
-app.use('/books', booksRouter)
+app.use('/', indexRoutes)
+app.use('/authors', authorsRoutes)
+app.use('/books', booksRoutes)
 
 app.listen(process.env.PORT || 3000)

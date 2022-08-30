@@ -1,19 +1,8 @@
-const express = require('express');
-const router = express.Router();
-// const multer = require('multer');
-
 const Author = require('../models/authorModel');
 const Book = require('../models/bookModel');
 const imageMimeTypes = ['image/jpg', 'image/png', 'image/gif'];
-// const upload = multer({
-//     dest: uploadPath,
-//     fileFilter: (req, file, callback) => {
-//         callback(null, imageMimeTypes.includes(file.mimetype))
-//     }
-// })
 
-// All Books Route
-router.get('/', async (req, res) => {
+const getBooks = async (req, res) => {
     let query = Book.find()
     if(req.query.title != null && req.query.title != ''){
         query = query.regex('title', new RegExp(req.query.title, 'i'))
@@ -33,15 +22,13 @@ router.get('/', async (req, res) => {
     } catch {
         res.redirect('/')
     }
-})
+}
 
-// New Book Route
-router.get('/new', async (req, res) => {
+const newBooksRoute = async (req, res) => {
     renderNewPage(res, new Book())
-})
+}
 
-// Create Book Route
-router.post('/', async (req, res) => {
+const createBook = async (req, res) => {
     const book = new Book({
         title: req.body.title,
         author: req.body.author,
@@ -56,32 +43,30 @@ router.post('/', async (req, res) => {
     } catch {
         renderNewPage(res, book, true)
     }
-})
+}
 
-// Show Book Route
-router.get('/:id', async (req, res) => {
+const getBook = async (req, res) => {
     try {
         const book = await Book.findById(req.params.id)
                                 .populate('author')
                                 .exec()
         res.render('books/show', { book })
     } catch (error) {
-        
+        console.log(error)
+        res.redirect('/')
     }
-})
+}
 
-// Edit Book Route
-router.get('/:id/edit', async (req, res) => {
+const editBook = async (req, res) => {
     try {
         const book = await Book.findById(req.params.id)
         renderEditPage(res, book)
     } catch (error) {
-        
+        res.redirect('/')
     }
-})
+}
 
-// Update Book Route
-router.put('/:id', async (req, res) => {
+const updateBook = async (req, res) => {
     let book
     try {
         book = await Book.findById(req.params.id)
@@ -103,10 +88,9 @@ router.put('/:id', async (req, res) => {
             res.redirect('/')
         }
     }
-})
+}
 
-// Delete Book Route
-router.delete('/:id', async (req, res) => {
+const deleteBook = async (req, res) => {
     let book
     try {
         book = await Book.findById(req.params.id)
@@ -123,8 +107,9 @@ router.delete('/:id', async (req, res) => {
             res.redirect('/')
         }
     }
-})
+}
 
+// Helper Function
 function saveCover(book, coverEncoded){
     if(coverEncoded == null) return
     const cover = JSON.parse(coverEncoded)
@@ -164,4 +149,12 @@ async function renderFormPage(res, book, form, hasError){
     }
 }
 
-module.exports = router
+module.exports = {
+    getBooks,
+    newBooksRoute,
+    createBook,
+    getBook,
+    editBook,
+    updateBook,
+    deleteBook
+}
